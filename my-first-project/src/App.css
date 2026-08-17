@@ -4,14 +4,14 @@
   box-sizing: border-box;
 }
 .main{
-  background: linear-gradient(to right, black , gray);
+  /* background: linear-gradient(to right, red, blue); */
   height: 1700px;
 }
 .navbar{
    width: 100%;
    height: 80px;
    /* background: linner-gradient(white green); */
-   background-image: linear-gradient(to right, red, blue);
+   background-image: linear-gradient(to right, black , black , gray);
    display: flex;
    justify-content: space-between;
    align-items: center;
@@ -19,7 +19,7 @@
 
 .navbar > h1{
   font-size: 40px;
-  color: black;
+  color: white;
   margin-left: 20px;
   padding: 20px;
 }
@@ -31,8 +31,8 @@
      padding: 10px;
      border: none;
      /* background: none; */
-     background-color: red;
-     color: blue;
+     background-color: black;
+     color:white;
      border-radius: 20px;
 
      /* border: 2px solid rgb(3, 3, 13); */
@@ -76,7 +76,7 @@
 .banner {
  margin-left: 20px;
  padding: 20px;
-  background: linear-gradient(to right, red, blue);
+  background: linear-gradient(to right, black , gray);
   height: 500px;
   display: flex;
   justify-content: flex-start;
@@ -152,7 +152,7 @@
 .card{
   width: 300px;
   height: 350px;
-   background-image: linear-gradient(to right, red, blue);
+   background-image: linear-gradient(to right,black, gray);
    border-radius: 10px;
 
   
@@ -168,8 +168,10 @@
 }
 .card > h1 {
   margin-left: 13px;
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid white;
   width: 70px;
+  color: white;
+
 
 }
 
@@ -179,6 +181,7 @@
   justify-content: center;
   gap: 10px;
   margin-top: 10px;
+  color: white;
   /* border-bottom: 2px solid black; */
   
   
@@ -187,7 +190,7 @@
 
 hr{
   width: 95%;
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid white;
   margin-top: 10px;
   margin-left: 2.5%;
 }
