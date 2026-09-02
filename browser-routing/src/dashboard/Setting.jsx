@@ -3,7 +3,7 @@ import React from 'react'
 const Setting = () => {
   return (
     <div>
-        <h2>this is setting</h2>
+        <h2 className='text-orange'>this is setting</h2>
     </div>
   )
 }

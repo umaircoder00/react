@@ -2,9 +2,10 @@ import React from 'react'
 import { Link, Outlet } from 'react-router-dom'
 const Dashboard = () => {
   return (
-    <div>
+    <div className='h-screen bg-color-blue '>
       Dashboard
-      <div>
+      <div className='bg-blue'>
+        
         {[
         {
           name: "profile",
