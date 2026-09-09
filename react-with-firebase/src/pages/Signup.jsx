@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import app from '../firebase/config.js';
+import { collection, addDoc } from "firebase/firestore";
+import app , {db} from '../firebase/config.js';
+import { uploadImageToCloudinary } from '../Cloudinary/cloudinary.js';
+
 
 
 const auth = getAuth(app);
@@ -9,44 +12,93 @@ const Signup = () => {
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [age, setAge] = useState("")
+    const [username, setUsername] = useState("")
+    const [profileImage,setProfileImage] = useState(null);
+    // console.log(email)
+    // console.log(password)
+    console.log(profileImage)
+    // console.log(username)
+    const signupHandler = async () => {
 
-    const signupHandler = () => {
+
+        try {
+            let { user } = await createUserWithEmailAndPassword(auth, email, password)
+           
+            console.log(user);
+      const imageUrl = await  uploadImageToCloudinary(profileImage);
+      console.log(imageUrl);
+      
+            if (user) {
+                try {
+                    const docRef = await addDoc(collection(db, "users"), {
+                       email,
+                       password,
+                       age,
+                       username,
+                       profileImage : imageUrl,
+                    });
+                    console.log("Document written with ID: ", docRef.id);
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                }
+            }
+
+
+            console.log("user created");
+
+
+        } catch (error) {
+            const { code, message } = error
+
+            console.log(error);
+
+        }
         // console.log("signup chala")
         // console.log(email,password)
 
-        const auth = getAuth();
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                console.log("user credential",userCredential );
-                
-                const user = userCredential.user;
-               
-                
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-               console.log(error.code,error.message);
-               
-            });
+        // const auth = getAuth();
+        // createUserWithEmailAndPassword(auth, email, password)
+        //     .then((userCredential) => {
+        //         console.log("user credential", userCredential);
+
+        //         const user = userCredential.user;
+
+
+        //     })
+        //     .catch((error) => {
+        //         const errorCode = error.code;
+        //         const errorMessage = error.message;
+        //         console.log(error.code, error.message);
+
+        //     });
     }
     return (
-       <div className='h-screen bg-amber-100 flex items-center justify-center'>
-         <div className='w-[300px] h-[300px] bg-white rounded-3xl shadow-2xl '>
-            <h1 className='font-bold ml-20 mt-2.5 text-2xl'>SignUp Page</h1>
-            <div>
-                <input className='w-[98%] h-[40px] p-4 mt-3 ml-0.5 outline-gray-300' value={email} onChange={(e) => setEmail(e.target.value)} type="Email" placeholder='Enter your email' />
-                <br />
-                <input className='w-[98%] h-[40px] p-4 mt-2.5 ml-0.5 outline-gray-300' value={password} onChange={(e) => setPassword(e.target.value)} type="Password" placeholder='Enter your password' />
+        <div className='h-screen bg-amber-100 flex items-center justify-center'>
+            <div className='w-[330px] h-[380px] bg-white rounded-3xl shadow-2xl '>
+                <h1 className='font-bold ml-20 mt-2.5 text-2xl'>SignUp Page</h1>
+                <div>
+                    <input className='w-[98%] h-[40px] p-4 mt-3 ml-0.5 outline-gray-300'
+                        value={email} onChange={(e) => setEmail(e.target.value)} type="Email" placeholder='Enter your email' />
 
-                <button className='ml-27 text-blue-800 font-bold mt-4 mb-2.5' onClick={signupHandler}>SignUp</button>
+                    <input className='w-[98%] h-[40px] p-4 mt-2.5 ml-0.5 outline-gray-300'
+                        value={password} onChange={(e) => setPassword(e.target.value)} type="Password" placeholder='Enter your password' />
 
-                <br />
+                    <input className='w-[98%] h-[40px] p-4 mt-3 ml-0.5 outline-gray-300'
+                        value={age} onChange={(e) => setAge(e.target.value)} type="number" placeholder='Enter your Age' />
 
-                <Link className='ml-20 font-bold mt-3.5 ' to={"/login"}><button>Go to login page</button></Link>
+                    <input className='w-[98%] h-[40px] p-4 mt-2.5 ml-0.5 outline-gray-300'
+                        value={username} onChange={(e) => setUsername(e.target.value)} type="text" placeholder='Enter your username' />
+                        <input className='w-[98%] h-[40px] p-4 mt-2.5 ml-0.5 outline-gray-300'
+                         onChange={(e) => setProfileImage(e.target.files[0])} type="file" placeholder='Enter your username' />
+                    <button className='ml-27 text-blue-800 font-bold mt-4 mb-2.5' onClick={signupHandler}>SignUp</button>
+
+                    <br />
+
+                    <Link className='ml-20 font-bold mt-3.5 ' to={"/login"}><button>Go to login page</button></Link>
+                </div>
             </div>
         </div>
-       </div>
     )
 }
 
