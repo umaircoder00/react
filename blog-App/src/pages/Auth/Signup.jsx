@@ -2,42 +2,57 @@ import React, { useEffect, useState } from 'react'
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { Box, Button, Paper, Typography } from '@mui/material'
 import { ToastContainer, toast } from 'react-toastify';
-import Input from '../../component/Input.jsx'
-import BasicTextFields from '../../component/Input'
-import Buttons from '../../component/Button'
+import Input from '../../components/Input.jsx'
+import BasicTextFields from '../../components/Input'
+import Buttons from '../../components/Button'
 import { auth } from '../../Config.js';
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { Link } from 'react-router-dom';
-import SigninWithGoolge from '../../component/SigninWithGoolge.jsx';
+import { data, Link } from 'react-router-dom';
+import SigninWithGoolge from '../../components/SigninWithGoolge.jsx';
 
 // import { red } from '@mui/material/colors'
 
 
 import { doc, setDoc } from "firebase/firestore"; 
 import { db } from '../../Config.js';
-const saveDataIntoDB = async (name = "", data) => {
 
+
+
+
+  // console.log("form:",form)
   
-// Add a new document in collection "cities"
-await setDoc(doc(db, "uers", data.uid), {
+ 
+  
+  
+   export const saveDataIntoDB = async (name = "", data) => {
+ console.log(data)
+
+
+try {
+ await setDoc(doc(db, "users", data.uid), {
+  
+   
   email : data.email,
-  name: data.displayName ? data.displayName : name,
-  photoURL: data.photoURL ? data.photoURL : "",
- role : "users"
+  name: data.displayName ? data.displayName : name ,
+  photoURL: data.photoURL ? data.photoURL : ""
   
 })
+
+
+
+} catch (error) {
+  console.log(error)
+ 
+}
 }
 
-
 const Signup = () => {
-
   
   const [form, setForm] = useState({
     email: "",
     password: "",
     username: ""
   });
-  // console.log("form:",form)
 
   const handleInputChange = (key, value) => {
     console.log("handle Working", value, key)
@@ -52,6 +67,7 @@ const Signup = () => {
 
       if(response.user){
 
+      await  saveDataIntoDB(form.username, response.user)
         toast.success("user signup sucessfully")
       }
       console.log(response);
@@ -69,26 +85,29 @@ const Signup = () => {
     }
   }
 
-  // const signupWithGoolgeHandler = async () => {
-  //  console.log("mera goole chala");
+
+  
+
+  const signupWithGoolgeHandler = async () => {
+   console.log("mera googgle chala");
    
-  //   try {
-  //     const provider = new GoogleAuthProvider();
-  //   let response = await  signInWithPopup(auth, provider)
+    try {
+      const provider = new GoogleAuthProvider();
+    let response = await  signInWithPopup(auth, provider)
 
-  //   console.log(response);
+    console.log(response);
     
-  //    if(response.user){
+     if(response.user){
 
-  //       toast.success("user signup sucessfully")
-  //     }
+        toast.success("user signup sucessfully")
+      }
 
-  //   } catch (error) {
-  //     toast.error(error.message);
+    } catch (error) {
+      toast.error(error.message);
       
-  //   }
+    }
 
-  // }
+  }
   return (
     <>
         
@@ -117,21 +136,21 @@ const Signup = () => {
 
           <Input
             handler={handleInputChange}
-            labal={"Enter your username"}
+            label={"Enter your username"}
             type={"username"}
             value={form.username}
 
           />
           <Input
             handler={handleInputChange}
-            labal={"Enter your Email"}
+            label={"Enter your Email"}
             type={"email"}
             value={form.email}
           />
 
           <Input
             handler={handleInputChange}
-            labal={"Enter your password"}
+            label={"Enter your password"}
             type={"password"}
             value={form.password}
           />
@@ -172,4 +191,3 @@ const Signup = () => {
 }
 
 export default Signup
-
